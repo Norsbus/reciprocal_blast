@@ -1,0 +1,4 @@
+{
+	"directories":["blastdbs","focal_proteins","slurm_job_scripts","slurm_log","blast_out_both","blast_out_forward","blast_out_reverse","clasp_out_forward","clasp_out_reverse","reblast_out","best_forward_hits","results","presence_absence"]
+}
+
