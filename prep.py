@@ -21,7 +21,7 @@ if __name__ == "__main__":
     with mp.Pool(processes=mp.cpu_count()) as pool:
         res = pool.map_async(mbdb,genomes).get()
 
-    proteome = [x for x in listdir(path + '/proteome') if '.pickle' not in x]
+    proteome = [x for x in listdir(path + '/proteome') if '.fasta' in x]
     if len(proteome) > 1:
         print('please provide only one proteome in proteome folder and clone a new repo for each separate proteome/genomes set')
         exit(1)
