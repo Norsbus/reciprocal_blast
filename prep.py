@@ -17,7 +17,7 @@ if __name__ == "__main__":
     run('./make_directories.py')
     path = getcwd()
     genomes = listdir(path + '/genomes/')
-    genomes = [g.strip().split('.fasta')[0] for g in genomes]
+    genomes = [g.strip().split('.fasta')[0] for g in genomes if '.fasta' in g]
     with mp.Pool(processes=mp.cpu_count()) as pool:
         res = pool.map_async(mbdb,genomes).get()
 
@@ -27,6 +27,7 @@ if __name__ == "__main__":
         exit(1)
     else:
         proteome = proteome[0]
+        run(f"makeblastdb -in proteome/{proteome} -out blastdbs/{proteome}_prot -dbtype prot".split())
     counter = 1
     ids = {}
     for record in SeqIO.parse(path+f'/proteome/{proteome}', "fasta"):

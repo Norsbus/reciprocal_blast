@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     path = getcwd()
     genomes = listdir(path + '/genomes/')
-    genomes = [g.strip().split('.fasta')[0] for g in genomes]
+    genomes = [g.strip().split('.fasta')[0] for g in genomes if '.fasta' in g]
     proteins = listdir(path + '/focal_proteins/')
     proteins = [p.strip().split('.fasta')[0] for p in proteins]
     

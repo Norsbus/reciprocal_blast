@@ -91,7 +91,7 @@ def write_best_hit_and_reblast(genome,protein):
             seq = Seq(str(seq).replace('-',''))
             SeqIO.write(SeqRecord(seq,id=f"pot_orthologue_{protein}_on_{taken_chromo}_nuc_start_{cf[0]}_nc_end_{cf[1]}"), f"./best_forward_hits/{genome}/{protein}.fasta", "fasta")
 
-        run(f'blastp -subject ./proteome/{proteome} -query ./best_forward_hits/{genome}/{protein}.fasta -outfmt 6 -out reblast_out/{genome}/{protein} -word_size 3 -evalue 1e-3',shell=True)
+        run(f'blastp -db ./blastdbs/{proteome}_prot -query ./best_forward_hits/{genome}/{protein}.fasta -outfmt 6 -out reblast_out/{genome}/{protein} -word_size 3 -evalue 1e-3',shell=True)
 
     return(0)
 
@@ -100,6 +100,6 @@ if __name__ == '__main__':
     genome = argv[1]
     protein = argv[2]
     run(f'mkdir -p blast_out_both/{genome} blast_out_forward/{genome} blast_out_reverse/{genome} clasp_out_forward/{genome} clasp_out_reverse/{genome} best_forward_hits/{genome} reblast_out/{genome}',shell=True)
-    proteome = [x for x in listdir('proteome') if '.pickle' not in x][0]
+    proteome = [x for x in listdir('proteome') if '.fasta' in x][0]
     exec_blast_clasp(genome,protein)
     write_best_hit_and_reblast(genome,protein)
