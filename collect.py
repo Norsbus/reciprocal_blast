@@ -21,20 +21,21 @@ if __name__ == "__main__":
         s_b = 1e6
         own = 1e6
 
-            reclasp_with_fragments(f'./reblast_out_{orientation}/{genome}/{protein}',f'./reclasp_out_{orientation}/{genome}/{protein}')
         if isfile(path + f'/reclasp_out_forward/{genome}/{protein}') or isfile(path + f'/reclasp_out_reverse/{genome}/{protein}'):
             for orientation in ['forward','reverse']:
-                if isfile(path + f'/reclasp_out_{orientation}/{genome}/{protein}')
+                if isfile(path + f'/reclasp_out_{orientation}/{genome}/{protein}'):
                     with open(f'reclasp_out_{orientation}/{genome}/{protein}','r') as f:
                         for line in f:
+                            if line[0] == '#' or len(line) == 0:
+                                continue
                             line = line.split('\t')
                             if line[0] == '#' or len(line) == 0:
                                 continue
-                            scores.append(float(line[-3]))
+                            scores.append(float(line[-1]))
                             ids.append(line[2])
                             if line[2] in record_mapping[protein] or record_mapping[protein] in line[2]:
-                                if float(line[-3]) < own:
-                                    own = float(line[-3])
+                                if float(line[-1]) < own:
+                                    own = float(line[-1])
         else:
             res[record_mapping[protein]] = 'NA'
             continue
@@ -43,7 +44,7 @@ if __name__ == "__main__":
             res[record_mapping[protein]] = 'NA'
             continue
 
-        idx = scores.index(min(scores))
+        idx = scores.index(max(scores))
         best_id = ids[idx]
         best = scores[idx]
         scores.remove(scores[idx])
@@ -52,7 +53,7 @@ if __name__ == "__main__":
             second_best_id = protein
             second_best = protein
         else:
-            idx = scores.index(min(scores))
+            idx = scores.index(max(scores))
             second_best = scores[idx]
             second_best_id = ids[idx]
             while (second_best_id in record_mapping[protein] or record_mapping[protein] in second_best_id) and len(scores) > 0:
@@ -62,16 +63,16 @@ if __name__ == "__main__":
                     second_best_id = protein
                     second_best = protein
                     break
-                idx = scores.index(min(scores))
+                idx = scores.index(max(scores))
                 second_best = scores[idx]
                 second_best_id = ids[idx]
 
         if best_id in record_mapping[protein] or record_mapping[protein] in best_id:
-            res[record_mapping[protein]] = [1,{'own evalue':best,'second best reverse hit':second_best_id,'second best reverse hit\'s evalue':second_best}]
+            res[record_mapping[protein]] = [1,{'own score':best,'second best reverse hit':second_best_id,'second best reverse hit\'s score':second_best}]
         else:
             if own >= 1e5:
                 own = 'original protein not hit by reverse blast'
-            res[record_mapping[protein]] = [0,{'best reverse hit':best_id,'best reverse hit\'s evalue':best,'original protein\'s evalue':own}]
+            res[record_mapping[protein]] = [0,{'best reverse hit':best_id,'best reverse hit\'s score':best,'original protein\'s score':own}]
 
     with open(f'results/{genome}.pickle','wb') as f:
         pickle.dump(res,f)
