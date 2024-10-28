@@ -91,7 +91,29 @@ def write_best_hit_and_reblast(genome,protein):
             seq = Seq(str(seq).replace('-',''))
             SeqIO.write(SeqRecord(seq,id=f"pot_orthologue_{protein}_on_{taken_chromo}_nuc_start_{cf[0]}_nc_end_{cf[1]}"), f"./best_forward_hits/{genome}/{protein}.fasta", "fasta")
 
-        run(f'blastp -db ./blastdbs/{proteome}_prot -query ./best_forward_hits/{genome}/{protein}.fasta -outfmt 6 -out reblast_out/{genome}/{protein} -word_size 3 -evalue 1e-3',shell=True)
+        run(f'blastp -db ./blastdbs/{proteome}_prot -query ./best_forward_hits/{genome}/{protein}.fasta -outfmt 6 -out reblast_out_both/{genome}/{protein} -word_size 3 -evalue 1e-3',shell=True)
+        
+        with open(f'./reblast_out_both/{genome}/{protein}','r') as f:
+            newlines_forward = []
+            newlines_reverse = []
+            for line in f:
+                line = line.split()
+                if line[0] == '#' or len(line) == 0:
+                    continue
+                if int(line[8]) > int(line[9]):
+                    line[8],line[9] = line[9],line[8]
+                    newlines_reverse.append('\t'.join(line))
+                else:
+                    newlines_forward.append('\t'.join(line))
+
+        with open(f'./reblast_out_forward/{genome}/{protein}','w') as f:
+            f.write('\n'.join(newlines_forward))
+        with open(f'./reblast_out_reverse/{genome}/{protein}','w') as f:
+            f.write('\n'.join(newlines_reverse))
+
+        for orientation in ['forward','reverse']:
+        
+            clasp_with_fragments(f'./reblast_out_{orientation}/{genome}/{protein}',f'./reclasp_out_{orientation}/{genome}/{protein}')
 
     return(0)
 
@@ -99,7 +121,7 @@ if __name__ == '__main__':
 
     genome = argv[1]
     protein = argv[2]
-    run(f'mkdir -p blast_out_both/{genome} blast_out_forward/{genome} blast_out_reverse/{genome} clasp_out_forward/{genome} clasp_out_reverse/{genome} best_forward_hits/{genome} reblast_out/{genome}',shell=True)
+    run(f'mkdir -p blast_out_both/{genome} blast_out_forward/{genome} blast_out_reverse/{genome} clasp_out_forward/{genome} clasp_out_reverse/{genome} best_forward_hits/{genome} reblast_out_both/{genome} reblast_out_forward/{genome} reblast_out_reverse/{genome} reclasp_out_forward/{genome} reclasp_out_reverse/{genome}',shell=True)
     proteome = [x for x in listdir('proteome') if '.fasta' in x][0]
     exec_blast_clasp(genome,protein)
     write_best_hit_and_reblast(genome,protein)

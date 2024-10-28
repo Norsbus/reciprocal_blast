@@ -20,17 +20,21 @@ if __name__ == "__main__":
         max_score = 1e6
         s_b = 1e6
         own = 1e6
-        if isfile(path + f'/reblast_out/{genome}/{protein}'):
-            with open(f'reblast_out/{genome}/{protein}','r') as f:
-                for line in f:
-                    line = line.split('\t')
-                    if line[0] == '#' or len(line) == 0:
-                        continue
-                    scores.append(float(line[-2]))
-                    ids.append(line[1])
-                    if line[1] in record_mapping[protein] or record_mapping[protein] in line[1]:
-                        if float(line[-2]) < own:
-                            own = float(line[-2])
+
+            reclasp_with_fragments(f'./reblast_out_{orientation}/{genome}/{protein}',f'./reclasp_out_{orientation}/{genome}/{protein}')
+        if isfile(path + f'/reclasp_out_forward/{genome}/{protein}') or isfile(path + f'/reclasp_out_reverse/{genome}/{protein}'):
+            for orientation in ['forward','reverse']:
+                if isfile(path + f'/reclasp_out_{orientation}/{genome}/{protein}')
+                    with open(f'reclasp_out_{orientation}/{genome}/{protein}','r') as f:
+                        for line in f:
+                            line = line.split('\t')
+                            if line[0] == '#' or len(line) == 0:
+                                continue
+                            scores.append(float(line[-3]))
+                            ids.append(line[2])
+                            if line[2] in record_mapping[protein] or record_mapping[protein] in line[2]:
+                                if float(line[-3]) < own:
+                                    own = float(line[-3])
         else:
             res[record_mapping[protein]] = 'NA'
             continue

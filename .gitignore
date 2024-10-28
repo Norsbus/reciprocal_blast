@@ -8,9 +8,13 @@ slurm_log/*
 blast_out_both/*
 blast_out_forward/*
 blast_out_reverse/*
+reblast_out_both/*
+reblast_out_forward/*
+reblast_out_reverse/*
 clasp_out_forward/*
 clasp_out_reverse/*
-reblast_out/*
+reclasp_out_forward/*
+reclasp_out_reverse/*
 best_forward_hits/*
 results/*
 presence_absence/*
