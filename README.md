@@ -14,7 +14,3 @@ gene,present,changed to present although not primary reverse hit because its sti
 
 - optional to get the presence absence per gene in pa_per_gene/{gene}.csv (after running the above): <br>
 python3 get_pa_per_gene.py
-
-- if you have genomes and a proteome as mentioned above (point 2) and set any custom slurm settings (point 1) you can also just copy and run the following to run the whole pipeline: <br>
-
-	python3 prep.py && python3 main1.py && python3 main2.py && python3 main3.py && python3 get_pa_per_gene.py
