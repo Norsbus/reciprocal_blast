@@ -40,7 +40,7 @@ if __name__ == "__main__":
             else:
                 written = 0
                 for e,d in eval_levels:
-                    if best_e > e:
+                    if own_e > e:
                         continue
                     else:
                         if best_e/own_e < d:
