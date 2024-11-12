@@ -24,7 +24,7 @@ def clasp_with_fragments(infile,outfile,l=0.5,e=0):
 
 def exec_blast_clasp(genome,protein):
         
-    blast(f'./blastdbs/{genome}',f'./focal_proteins/{protein}.fasta',f'./blast_out_both/{genome}/{protein}')
+    blast(f'{blastdbs_path}/{genome}',f'./focal_proteins/{protein}.fasta',f'./blast_out_both/{genome}/{protein}')
     
     with open(f'./blast_out_both/{genome}/{protein}','r') as f:
         newlines_forward = []
@@ -91,7 +91,7 @@ def write_best_hit_and_reblast(genome,protein):
             seq = Seq(str(seq).replace('-',''))
             SeqIO.write(SeqRecord(seq,id=f"pot_orthologue_{protein}_on_{taken_chromo}_nuc_start_{cf[0]}_nc_end_{cf[1]}"), f"./best_forward_hits/{genome}/{protein}.fasta", "fasta")
 
-        run(f'blastp -db ./blastdbs/{proteome}_prot -query ./best_forward_hits/{genome}/{protein}.fasta -outfmt 6 -out reblast_out/{genome}/{protein} -word_size 3 -evalue 1e-3',shell=True)
+        run(f'blastp -db {blastdbs_path}/{proteome}_prot -query ./best_forward_hits/{genome}/{protein}.fasta -outfmt 6 -out reblast_out/{genome}/{protein} -word_size 3 -evalue 1e-3',shell=True)
 
     return(0)
 
@@ -99,7 +99,12 @@ if __name__ == '__main__':
 
     genome = argv[1]
     protein = argv[2]
+    with open('paths') as f:
+        genomes_path,proteome_path,blastdbs_path = f.readlines()
+    genomes_path = genomes_path.strip()
+    proteome_path = proteome_path.strip()
+    blastdbs_path = blastdbs_path.strip()
     run(f'mkdir -p blast_out_both/{genome} blast_out_forward/{genome} blast_out_reverse/{genome} clasp_out_forward/{genome} clasp_out_reverse/{genome} best_forward_hits/{genome} reblast_out/{genome}',shell=True)
-    proteome = [x for x in listdir('proteome') if '.fasta' in x][0]
+    proteome = [x for x in listdir(f'{proteome_path}') if '.fasta' in x]
     exec_blast_clasp(genome,protein)
     write_best_hit_and_reblast(genome,protein)

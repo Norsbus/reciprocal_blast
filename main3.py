@@ -11,8 +11,15 @@ if __name__ == "__main__":
     conda_lines = ''
 
     path = getcwd()
-    genomes = listdir(path + '/genomes/')
-    genomes = [g.strip().split('.fasta')[0] for g in genomes if '.fasta' in g]
+    genomes = []
+    with open('genomes.txt') as f:
+        for line in f:
+            if line[0] == '#':
+                continue
+            line = line.strip()
+            if len(line) == 0:
+                continue
+            genomes.append(line)
     
     skip_some = False
 

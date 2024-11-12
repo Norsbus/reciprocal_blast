@@ -20,6 +20,8 @@ best_forward_hits/*
 results/*
 presence_absence/*
 pa_per_gene/*
+paths
+genomes.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
