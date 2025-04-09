@@ -28,7 +28,7 @@ if __name__ == "__main__":
                             if line[0] == '#' or len(line) == 0:
                                 continue
                             line = line.split('\t')
-                            if line[0] == '#' or len(line) == 0:
+                            if line[0] == '#' or len(line) == 0 or line[0] == 'F':
                                 continue
                             scores.append(float(line[-1]))
                             ids.append(line[2])
