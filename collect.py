@@ -34,7 +34,7 @@ if __name__ == "__main__":
                             scores.append(float(line[-1]))
                             ids.append(line[2])
                             if line[2] in record_mapping[protein] or record_mapping[protein] in line[2]:
-                                if float(line[-1]) < own:
+                                if float(line[-1]) > own:
                                     own = float(line[-1])
         else:
             res[record_mapping[protein]] = 'NA'

@@ -31,9 +31,7 @@ if __name__ == "__main__":
         else:
             best_e = res[1]["best reverse hit's score"]
             own_e = res[1]["original protein's score"]
-            if own_e == 0:
-                out.write(f'{gene},1,1\n')
-            elif own_e == 'original protein not hit by reverse blast':
+            if own_e == 'original protein not hit by reverse blast':
                 out.write(f'{gene},0,0\n')
             elif own_e > 1e-9:
                 out.write(f'{gene},0,0\n')
