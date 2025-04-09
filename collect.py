@@ -18,7 +18,6 @@ if __name__ == "__main__":
     for protein in proteins:
         ids,scores = [],[]
         max_score = 1e6
-        s_b = 1e6
         own = 1e6
         if isfile(path + f'/reblast_out/{genome}/{protein}'):
             with open(f'reblast_out/{genome}/{protein}','r') as f:
